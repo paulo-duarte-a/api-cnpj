@@ -67,7 +67,7 @@ Execute os testes automatizados com:
 
 ## 📘 Exemplo de Requisição
 
-### [http://localhost:8080/swagger-ui/index.html](https://cnpjbrasil.pauloduarte.tec.br/swagger-ui/index.html)
+### [https://cnpjbrasil.pauloduarte.tec.br/swagger-ui/index.html](https://cnpjbrasil.pauloduarte.tec.br/swagger-ui/index.html)
 
 ## 📄 Licença
 
