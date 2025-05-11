@@ -7,17 +7,27 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
 
 @Configuration
 public class SwaggerConfig {
 
+    private final Environment environment;
+
+    public SwaggerConfig(Environment environment) {
+        this.environment = environment;
+    }
+
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
-        return new OpenAPI()
+        OpenAPI openApi = new OpenAPI()
                 .info(new Info()
                         .title("API CNPJ Brasil")
                         .version("1.0.0")
@@ -28,7 +38,8 @@ public class SwaggerConfig {
                                 .url("https://pauloduarte.tec.br"))
                         .license(new License()
                                 .name("Apache 2.0")
-                                .url("https://www.apache.org/licenses/LICENSE-2.0"))).addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                                .url("https://www.apache.org/licenses/LICENSE-2.0")))
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(
                         new Components()
                                 .addSecuritySchemes(securitySchemeName,
@@ -39,5 +50,14 @@ public class SwaggerConfig {
                                                 .bearerFormat("JWT")
                                 )
                 );
+
+        // Configuração do servidor apenas para produção
+        if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
+            openApi.addServersItem(new Server()
+                    .url("https://cnpjbrasil.pauloduarte.tec.br")
+                    .description("Servidor de Produção"));
+        }
+
+        return openApi;
     }
 }
