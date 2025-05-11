@@ -1,6 +1,7 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ public class QualificacaoSocioController {
     private final QualificacaoSocioService qualificacaoSocioService;
     
     @GetMapping
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
     public Page<QualificacaoSocio> getAllQualificacoesSocios(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

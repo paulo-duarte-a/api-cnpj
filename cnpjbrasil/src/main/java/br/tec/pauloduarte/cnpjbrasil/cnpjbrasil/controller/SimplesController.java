@@ -1,6 +1,7 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 // import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class SimplesController {
     private final SimplesService simplesService;
     
     @GetMapping
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
     public Page<Simples> getAllSimples(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -36,7 +38,7 @@ public class SimplesController {
         return simplesService.findAll(page, size, sort, cnpjBasico, opcaoPeloSimples, opcaoPeloMei);
     }
     
-    @GetMapping("/{id}")
+    // @GetMapping("/{id}")
     public Simples getSimplesById(@PathVariable Long id) {
         return simplesService.findById(id);
     }

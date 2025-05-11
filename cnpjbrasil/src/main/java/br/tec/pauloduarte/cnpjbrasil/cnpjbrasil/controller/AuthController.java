@@ -7,6 +7,8 @@ import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.Usuario;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.UsuarioRole;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.repository.UsuarioRepository;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.security.JwtTokenProvider;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +53,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+        // verifica se o email já está em uso
         if (usuarioRepository.existsByEmail(registerRequest.getEmail())) {
             return new ResponseEntity<>("Erro: Email já está em uso!", HttpStatus.BAD_REQUEST);
         }

@@ -1,6 +1,7 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.Estabelecimento;
@@ -17,6 +18,7 @@ public class EstabelecimentoController {
     private final EstabelecimentoService estabelecimentoService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
     public Page<Estabelecimento> getAllEstabelecimentos(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -36,7 +38,7 @@ public class EstabelecimentoController {
         );
     }
 
-    @GetMapping("/{id}")
+    // @GetMapping("/{id}")
     public Estabelecimento getEstabelecimentoById(@PathVariable Long id) {
         return estabelecimentoService.findById(id);
     }

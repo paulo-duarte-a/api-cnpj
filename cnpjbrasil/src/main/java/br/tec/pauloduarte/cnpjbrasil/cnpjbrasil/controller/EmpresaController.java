@@ -1,6 +1,7 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 // import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class EmpresaController {
     private final EmpresaService empresaService;
     
     @GetMapping
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
     public Page<Empresa> getAllEmpresas(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -43,7 +45,7 @@ public class EmpresaController {
         );
     }
     
-    @GetMapping("/{id}")
+    // @GetMapping("/{id}")
     public Empresa getEmpresaById(@PathVariable Long id) {
         return empresaService.findById(id);
     }
