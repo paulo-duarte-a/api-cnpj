@@ -1,6 +1,5 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.service;
 
-import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;

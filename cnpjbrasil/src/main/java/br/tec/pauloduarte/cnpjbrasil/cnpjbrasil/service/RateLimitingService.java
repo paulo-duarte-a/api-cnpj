@@ -3,7 +3,6 @@ package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.service;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.UsuarioRole;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -73,8 +72,11 @@ public class RateLimitingService {
                 throw new IllegalArgumentException("Role de usuário desconhecida para rate limiting: " + role);
         }
 
-        Refill refill = Refill.greedy(refillTokens, refillDuration);
-        Bandwidth limit = Bandwidth.classic(capacity, refill);
+        Bandwidth limit = Bandwidth.builder()
+                           .capacity(capacity)
+                           .refillGreedy(refillTokens, refillDuration)
+                           .build();
+
         return Bucket.builder().addLimit(limit).build();
     }
 }
