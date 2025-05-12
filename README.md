@@ -16,6 +16,7 @@ Uma API REST desenvolvida com Spring Boot para consulta de informações de empr
 * Spring Web
 * Spring Data JPA
 * Banco de dados: PostgreSQL
+* https://arquivos.receitafederal.gov.br/dados/cnpj/dados_abertos_cnpj/2025-04/
 
 ## 📦 Como Executar
 
