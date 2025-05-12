@@ -1,5 +1,7 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class Usuario {
     @Column(unique = true)
     private String email;
     
+    @JsonIgnore
     private String senha;
     
     @Enumerated(EnumType.STRING)

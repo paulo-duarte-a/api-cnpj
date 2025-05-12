@@ -3,10 +3,9 @@ package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.controller;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.dto.AuthResponse;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.dto.LoginRequest;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.dto.RegisterRequest;
-import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.Usuario;
-import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.UsuarioRole;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.repository.UsuarioRepository;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.security.JwtTokenProvider;
+import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.service.UsuarioService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class AuthController {
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    UsuarioService usuarioService;
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -58,14 +57,11 @@ public class AuthController {
         if (usuarioRepository.existsByEmail(registerRequest.getEmail())) {
             return new ResponseEntity<>("Erro: Email já está em uso!", HttpStatus.BAD_REQUEST);
         }
-
-        Usuario usuario = new Usuario();
-        usuario.setEmail(registerRequest.getEmail());
-        usuario.setSenha(passwordEncoder.encode(registerRequest.getSenha()));
-
-        usuario.setRole(UsuarioRole.FREE);
-
-        usuarioRepository.save(usuario);
+        
+        usuarioService.createUsuario(
+            registerRequest.getEmail(),
+            registerRequest.getSenha()
+        );
 
         // Opcionalmente, pode logar o usuário e retornar um token JWT aqui também.
         // Para simplificar, apenas confirmamos o registro.
