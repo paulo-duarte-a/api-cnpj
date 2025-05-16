@@ -28,22 +28,12 @@ public class JwtTokenProvider {
     private int jwtExpirationMs;
 
     private SecretKey getSigningKey() {
-        // A chave precisa ter um tamanho mínimo dependendo do algoritmo (ex: HS512 requer 512 bits / 64 bytes)
-        // Se a chave for menor, o jjwt-impl pode lançar um erro.
-        // Esta é uma forma simples de garantir o tamanho, mas em produção considere uma chave gerada externamente.
-        byte[] keyBytes = jwtSecretString.getBytes();
-        if (keyBytes.length < 64 && jwtSecretString.length() < 64) { // Exemplo para HS512
-             // Pad para garantir o tamanho. NÃO FAÇA ISSO EM PRODUÇÃO REAL COM UMA CHAVE FRACA.
-             // Use uma chave forte e de tamanho adequado desde o início.
-            String paddedKey = jwtSecretString;
-            while (paddedKey.length() < 64) {
-                paddedKey += "0"; // Apenas para exemplo, NÃO é seguro para chaves reais.
-            }
-            keyBytes = paddedKey.substring(0,64).getBytes();
-
-        } else if (keyBytes.length > 64) {
-             keyBytes = java.util.Arrays.copyOf(keyBytes, 64);
-        }
+        byte[] keyBytes = HKDF.fromHmacSha512()
+            .extractAndExpand(
+                jwtSecretString.getBytes(StandardCharsets.UTF_8),
+                "salt".getBytes(StandardCharsets.UTF_8),
+                "info".getBytes(StandardCharsets.UTF_8),
+                64);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
