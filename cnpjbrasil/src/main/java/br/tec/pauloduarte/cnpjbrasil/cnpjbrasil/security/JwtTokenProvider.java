@@ -1,8 +1,12 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
+
+import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
+import org.bouncycastle.crypto.params.HKDFParameters;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +16,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.security.Security;
+
 
 @Component
 public class JwtTokenProvider {
@@ -27,14 +36,27 @@ public class JwtTokenProvider {
     @Value("${app.jwt.expiration-ms}")
     private int jwtExpirationMs;
 
+     private static final String HMAC_ALGORITHM = "HmacSHA512";
+
+    @PostConstruct
+    public void init() {
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
+    }
+
     private SecretKey getSigningKey() {
-        byte[] keyBytes = HKDF.fromHmacSha512()
-            .extractAndExpand(
-                jwtSecretString.getBytes(StandardCharsets.UTF_8),
-                "salt".getBytes(StandardCharsets.UTF_8),
-                "info".getBytes(StandardCharsets.UTF_8),
-                64);
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] ikm = jwtSecretString.getBytes(StandardCharsets.UTF_8);
+        byte[] salt = "jwt-salt".getBytes(StandardCharsets.UTF_8);
+        byte[] info = "jwt-signing".getBytes(StandardCharsets.UTF_8);
+
+        HKDFBytesGenerator hkdf = new HKDFBytesGenerator(new org.bouncycastle.crypto.digests.SHA512Digest());
+        hkdf.init(new HKDFParameters(ikm, salt, info));
+
+        byte[] derivedKey = new byte[64];
+        hkdf.generateBytes(derivedKey, 0, 64);
+
+        return new SecretKeySpec(derivedKey, HMAC_ALGORITHM);
     }
 
     public String generateToken(Authentication authentication) {
