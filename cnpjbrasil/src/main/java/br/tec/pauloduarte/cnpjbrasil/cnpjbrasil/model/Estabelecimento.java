@@ -14,8 +14,8 @@ public class Estabelecimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empresa")
-    private Long idEmpresa;
+    @Column(name = "id_estabelecimento")
+    private Long idEstabelecimento;
 
     @Column(name = "cnpj_basico", nullable = false, length = 8)
     private String cnpjBasico;

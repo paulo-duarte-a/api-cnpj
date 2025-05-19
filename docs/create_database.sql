@@ -41,7 +41,7 @@ CREATE TABLE empresas (
 );
 
 CREATE TABLE estabelecimentos (
-	id_empresa SERIAL PRIMARY KEY,
+	id_estabelecimento SERIAL PRIMARY KEY,
     cnpj_basico VARCHAR(8) NOT NULL, -- Oito primeiros dígitos do CNPJ
     cnpj_ordem VARCHAR(4) NOT NULL, -- Nono ao décimo segundo dígito do CNPJ
     cnpj_dv VARCHAR(2) NOT NULL, -- Dois últimos dígitos verificadores do CNPJ
@@ -100,14 +100,12 @@ CREATE TABLE socios (
     faixa_etaria INTEGER NULL -- 1 (0-12 anos)...9 (>80 anos), 0 (Não se aplica)
 );
 
--- TABELA DE USUÁRIOS (para controle de acesso ao sistema)
-CREATE TYPE usuario_role AS ENUM ('FREE', 'BASIC', 'PREMIUM', 'ADMIN');
-
+-- TABELA DE USUÁRIOS (para controle de acesso e autenticação)
 CREATE TABLE usuarios (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     email VARCHAR UNIQUE,
     senha VARCHAR,
-    role usuario_role
+    role VARCHAR(10) DEFAULT 'FREE' CHECK (role IN ('FREE', 'BASIC', 'PREMIUM', 'ADMIN')),
 );
 
 -- DEFINIÇÃO DE CHAVES ESTRANGEIRAS (LIGAÇÕES ENTRE TABELAS)

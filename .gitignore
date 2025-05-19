@@ -56,3 +56,6 @@ spring.log
 *.swp
 *.swo
 *.orig
+
+
+dbwallet/

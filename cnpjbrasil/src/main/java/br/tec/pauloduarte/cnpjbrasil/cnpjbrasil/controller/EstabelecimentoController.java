@@ -22,7 +22,7 @@ public class EstabelecimentoController {
     public Page<Estabelecimento> getAllEstabelecimentos(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "idEmpresa") String sort,
+        @RequestParam(defaultValue = "idEstabelecimento") String sort,
         @RequestParam(required = false) String cnpjBasico,
         @RequestParam(required = false) Integer identificadorMatrizFilial,
         @RequestParam(required = false) String nomeFantasia,
@@ -50,7 +50,7 @@ public class EstabelecimentoController {
 
     // @PutMapping("/{id}")
     public Estabelecimento updateEstabelecimento(@PathVariable Long id, @RequestBody Estabelecimento estabelecimento) {
-        estabelecimento.setIdEmpresa(id);
+        estabelecimento.setIdEstabelecimento(id);
         return estabelecimentoService.save(estabelecimento);
     }
 
