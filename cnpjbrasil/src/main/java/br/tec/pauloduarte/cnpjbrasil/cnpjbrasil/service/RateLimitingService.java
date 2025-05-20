@@ -42,6 +42,11 @@ public class RateLimitingService {
         return userBuckets.computeIfAbsent(userId, id -> createNewBucket(role));
     }
 
+    public void updateBucketForUser(String userId, UsuarioRole newRole) {
+        Bucket newBucket = createNewBucket(newRole);
+        userBuckets.put(userId, newBucket);
+    }
+
     private Bucket createNewBucket(UsuarioRole role) {
         long capacity;
         long refillTokens;

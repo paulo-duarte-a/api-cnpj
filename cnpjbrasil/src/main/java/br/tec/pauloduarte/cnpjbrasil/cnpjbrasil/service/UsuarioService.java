@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
+    private final RateLimitingService rateLimitingService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -80,6 +81,7 @@ public class UsuarioService {
         
         if (usuarioUpdateDTO.getRole() != null) {
             existingUsuario.setRole(usuarioUpdateDTO.getRole());
+            rateLimitingService.updateBucketForUser(existingUsuario.getEmail(), usuarioUpdateDTO.getRole());
         }
         
         return usuarioRepository.save(existingUsuario);
