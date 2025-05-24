@@ -36,6 +36,7 @@ public class UserController {
         @RequestParam(required = false) String email,
         @RequestParam(required = false) String role
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return usuarioService.findAll(page, size, sort, email, role);
     }
 

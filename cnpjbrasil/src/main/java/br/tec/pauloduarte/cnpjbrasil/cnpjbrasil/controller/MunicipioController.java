@@ -30,6 +30,7 @@ public class MunicipioController {
         @RequestParam(required = false) String codigo,
         @RequestParam(required = false) String descricao
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return municipioService.findAll(page, size, sort, codigo, descricao);
     }
 }

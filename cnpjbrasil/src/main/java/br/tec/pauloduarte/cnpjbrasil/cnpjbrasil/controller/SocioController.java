@@ -26,7 +26,7 @@ public class SocioController {
     private final SocioService socioService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
     public Page<Socio> getAllSocios(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -38,6 +38,7 @@ public class SocioController {
         @RequestParam(required = false) String paisCodigo,
         @RequestParam(required = false) Integer faixaEtaria
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return socioService.findAll(
             page, size, sort, 
             cnpjBasico, identificadorSocio, 

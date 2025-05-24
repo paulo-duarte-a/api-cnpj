@@ -16,7 +16,8 @@ public class EstabelecimentoSpecification {
         String nomeFantasia,
         Integer situacaoCadastral,
         String uf,
-        String municipioCodigo
+        String municipioCodigo,
+        String cnaeFiscalPrincipalCodigo
     ) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -46,6 +47,22 @@ public class EstabelecimentoSpecification {
 
             if (municipioCodigo != null && !municipioCodigo.isEmpty()) {
                 predicates.add(criteriaBuilder.equal(root.get("municipioCodigo"), municipioCodigo));
+            }
+
+            if (cnaeFiscalPrincipalCodigo != null && !cnaeFiscalPrincipalCodigo.isEmpty()) {
+                Predicate condicaoPrincipal = criteriaBuilder.equal(
+                    root.get("cnaeFiscalPrincipalCodigo"),
+                    cnaeFiscalPrincipalCodigo
+                );
+
+                Predicate condicaoSecundaria = criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("cnaeFiscalSecundaria")),
+                    "%" + cnaeFiscalPrincipalCodigo.toLowerCase() + "%"
+                );
+
+                Predicate condicaoCombinada = criteriaBuilder.or(condicaoPrincipal, condicaoSecundaria);
+                
+                predicates.add(condicaoCombinada);
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

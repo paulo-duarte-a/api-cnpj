@@ -26,7 +26,8 @@ public class EstabelecimentoService {
         String nomeFantasia,
         Integer situacaoCadastral,
         String uf,
-        String municipioCodigo
+        String municipioCodigo,
+        String cnaeFiscalPrincipalCodigo
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         
@@ -37,7 +38,8 @@ public class EstabelecimentoService {
                 nomeFantasia,
                 situacaoCadastral,
                 uf,
-                municipioCodigo
+                municipioCodigo,
+                cnaeFiscalPrincipalCodigo
             ),
             pageable
         );

@@ -29,6 +29,7 @@ public class NaturezaJuridicaController {
         @RequestParam(required = false) String codigo,
         @RequestParam(required = false) String descricao
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return naturezaJuridicaService.findAll(page, size, sort, codigo, descricao);
     }
 }

@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.lang.NonNull;
+
 
 @Component
 public class RateLimitingInterceptor implements HandlerInterceptor {
@@ -30,7 +32,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
     private UsuarioRepository usuarioRepository; // Para buscar a role do usuário atual
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Se não houver autenticação, ou for anônimo, não aplicar rate limit (ou aplicar um rate limit de IP)

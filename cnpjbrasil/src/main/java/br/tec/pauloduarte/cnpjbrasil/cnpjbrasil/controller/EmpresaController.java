@@ -26,7 +26,7 @@ public class EmpresaController {
     private final EmpresaService empresaService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
     public Page<Empresa> getAllEmpresas(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -37,6 +37,7 @@ public class EmpresaController {
         @RequestParam(required = false) String qualificacaoResponsavelCodigo,
         @RequestParam(required = false) String porteEmpresa
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return empresaService.findAll(
             page, size, sort, 
             cnpjBasico, razaoSocial, 

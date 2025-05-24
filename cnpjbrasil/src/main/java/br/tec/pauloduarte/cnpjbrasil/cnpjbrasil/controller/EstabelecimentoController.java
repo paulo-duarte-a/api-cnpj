@@ -18,7 +18,7 @@ public class EstabelecimentoController {
     private final EstabelecimentoService estabelecimentoService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
     public Page<Estabelecimento> getAllEstabelecimentos(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -28,13 +28,15 @@ public class EstabelecimentoController {
         @RequestParam(required = false) String nomeFantasia,
         @RequestParam(required = false) Integer situacaoCadastral,
         @RequestParam(required = false) String uf,
-        @RequestParam(required = false) String municipioCodigo
+        @RequestParam(required = false) String municipioCodigo,
+        @RequestParam(required = false) String cnaeFiscalPrincipalCodigo
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return estabelecimentoService.findAll(
             page, size, sort,
             cnpjBasico, identificadorMatrizFilial,
             nomeFantasia, situacaoCadastral,
-            uf, municipioCodigo
+            uf, municipioCodigo, cnaeFiscalPrincipalCodigo
         );
     }
 

@@ -26,7 +26,7 @@ public class SimplesController {
     private final SimplesService simplesService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
     public Page<Simples> getAllSimples(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
@@ -35,6 +35,7 @@ public class SimplesController {
         @RequestParam(required = false) String opcaoPeloSimples,
         @RequestParam(required = false) String opcaoPeloMei
     ) {
+        size = Math.max(1, Math.min(size, 30));
         return simplesService.findAll(page, size, sort, cnpjBasico, opcaoPeloSimples, opcaoPeloMei);
     }
     
