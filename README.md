@@ -72,7 +72,7 @@ Execute os testes automatizados com:
 
 ## 📄 Licença
 
-Distribuído sob a licença [MIT](LICENSE).
+Distribuído sob a licença [WTFPL ](LICENSE).
 
 ## 🤝 Contribuindo
 
