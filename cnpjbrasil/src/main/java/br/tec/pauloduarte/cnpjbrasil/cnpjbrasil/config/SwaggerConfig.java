@@ -54,7 +54,7 @@ public class SwaggerConfig {
         // Configuração do servidor apenas para produção
         if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
             openApi.addServersItem(new Server()
-                    .url("https://cnpjbrasil.pauloduarte.tec.br")
+                    .url("https://apicnpj.pauloduarte.tec.br")
                     .description("Servidor de Produção"));
         }
 

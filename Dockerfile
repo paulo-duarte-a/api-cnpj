@@ -6,7 +6,7 @@ WORKDIR /app
 
 # update packages and install unzip
 RUN apt-get update && \
-    apt-get install -y unzip curl && \
+    apt-get install -y unzip curl wget && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/oracle

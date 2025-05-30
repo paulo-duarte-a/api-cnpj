@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "estabelecimentos")
-public class Estabelecimento {
+public class EstabelecimentoDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,19 +47,11 @@ public class Estabelecimento {
     @Column(name = "pais_codigo", length = 10)
     private String paisCodigo;
 
-    // @ManyToOne
-    // @JoinColumn(name = "pais_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    // private Pais pais;
-
     @Column(name = "data_inicio_atividade", length = 10)
     private String dataInicioAtividade;
 
     @Column(name = "cnae_fiscal_principal_codigo", length = 10)
     private String cnaeFiscalPrincipalCodigo;
-
-    // @ManyToOne
-    // @JoinColumn(name = "cnae_fiscal_principal_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    // private Cnae cnaeFiscalPrincipal;
 
     @Column(name = "cnae_fiscal_secundaria", columnDefinition = "TEXT")
     private String cnaeFiscalSecundaria;
@@ -87,10 +79,6 @@ public class Estabelecimento {
 
     @Column(name = "municipio_codigo", length = 10)
     private String municipioCodigo;
-
-    @ManyToOne
-    @JoinColumn(name = "municipio_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    private Municipio municipio;
 
     @Column(name = "ddd1", length = 4)
     private String ddd1;

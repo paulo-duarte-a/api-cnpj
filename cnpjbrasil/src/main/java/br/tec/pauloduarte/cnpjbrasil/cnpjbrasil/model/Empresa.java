@@ -30,13 +30,11 @@ public class Empresa {
     @Column(name = "razao_social", length = 255)
     private String razaoSocial;
     
-    @ManyToOne
-    @JoinColumn(name = "natureza_juridica_codigo", referencedColumnName = "codigo")
-    private NaturezaJuridica naturezaJuridica;
-    
-    @ManyToOne
-    @JoinColumn(name = "qualificacao_responsavel_codigo", referencedColumnName = "codigo")
-    private QualificacaoSocio qualificacaoResponsavel;
+    @Column(name = "natureza_juridica_codigo")
+    private Integer naturezaJuridicaCodigo;
+
+    @Column(name = "qualificacao_responsavel_codigo")
+    private Integer qualificacaoResponsavelCodigo;
     
     @Column(name = "capital_social", length = 20)
     private String capitalSocial;

@@ -8,9 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.dto.UsuarioDTO;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.dto.UsuarioUpdateDTO;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.Usuario;
 import br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model.UsuarioRole;
@@ -22,13 +26,26 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @CacheConfig(cacheNames = "usuarios")
-public class UsuarioService {
-    
+public class UsuarioService {    
     private final UsuarioRepository usuarioRepository;
     private final RateLimitingService rateLimitingService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Cacheable
+    public UsuarioDTO getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String userEmail = userDetails.getUsername();
+
+        Usuario usuario = usuarioRepository.findByEmail(userEmail)
+                .orElse(null);
+        UsuarioDTO dto = new UsuarioDTO();
+        dto.setEmail(usuario.getEmail());
+        dto.setRole(usuario.getRole());
+        return dto;
+    }
 
     @Cacheable
     public Page<Usuario> findAll(

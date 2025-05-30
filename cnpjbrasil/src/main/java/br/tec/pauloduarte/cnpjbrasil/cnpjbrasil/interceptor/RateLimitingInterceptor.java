@@ -67,9 +67,11 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
             return true; // Requisição permitida
         } else {
             long waitForRefillNanos = probe.getNanosToWaitForRefill();
+            response.addHeader("Access-Control-Expose-Headers", "X-Rate-Limit-Retry-After-Seconds");
             response.addHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(waitForRefillNanos / 1_000_000_000L));
-            response.sendError(HttpStatus.TOO_MANY_REQUESTS.value(),
-                    "Você excedeu o limite de requisições para o seu perfil. Tente novamente mais tarde.");
+            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+            response.getWriter().write("Você excedeu o limite de requisições para o seu perfil. Tente novamente mais tarde.");
+            response.getWriter().flush();
             logger.info("Rate limit excedido para o usuário {} com perfil {}", userEmail, userRole);
             return false; // Requisição bloqueada
         }
