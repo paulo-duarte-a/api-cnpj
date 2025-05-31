@@ -156,15 +156,13 @@ CREATE INDEX idx_usuarios_role ON usuarios (role);
 
 CREATE INDEX idx_empresas_cnpj_basico ON empresas (cnpj_basico);
 -- Para busca de texto em Oracle utilizar Oracle Text
-CREATE INDEX idx_empresas_razao_social
-  ON empresas(razao_social) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_empresas_razao_social  ON empresas(razao_social);
 CREATE INDEX idx_empresas_natureza_juridica_codigo ON empresas (natureza_juridica_codigo);
 CREATE INDEX idx_empresas_porte_empresa ON empresas (porte_empresa);
 CREATE INDEX idx_empresas_qualificacao_responsavel_codigo ON empresas (qualificacao_responsavel_codigo);
 
 CREATE INDEX idx_estabelecimentos_cnpj_basico ON estabelecimentos (cnpj_basico);
-CREATE INDEX idx_estabelecimentos_nome_fantasia
-  ON estabelecimentos(nome_fantasia) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_estabelecimentos_nome_fantasia ON estabelecimentos(nome_fantasia);
 CREATE INDEX idx_estabelecimentos_situacao_cadastral ON estabelecimentos (situacao_cadastral);
 CREATE INDEX idx_estabelecimentos_pais_codigo ON estabelecimentos (pais_codigo);
 CREATE INDEX idx_estabelecimentos_cnae_principal_codigo ON estabelecimentos (cnae_fiscal_principal_codigo);
@@ -173,8 +171,7 @@ CREATE INDEX idx_estabelecimentos_uf ON estabelecimentos (uf);
 CREATE INDEX idx_estabelecimentos_cep ON estabelecimentos (cep);
 
 CREATE INDEX idx_socios_cnpj_basico ON socios (cnpj_basico);
-CREATE INDEX idx_socios_nome_socio
-  ON socios(nome_socio) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_socios_nome_socio ON socios(nome_socio);
 CREATE INDEX idx_socios_cpf_cnpj_socio ON socios (cpf_cnpj_socio);
 CREATE INDEX idx_socios_qualificacao_socio_codigo ON socios (qualificacao_socio_codigo);
 CREATE INDEX idx_socios_pais_codigo ON socios (pais_codigo);
@@ -183,15 +180,15 @@ CREATE INDEX idx_socios_qualificacao_representante_legal_codigo
   ON socios (qualificacao_representante_legal_codigo);
 
 CREATE INDEX idx_paises_descricao
-  ON paises(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON paises(descricao);
 CREATE INDEX idx_municipios_descricao
-  ON municipios(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON municipios(descricao);
 CREATE INDEX idx_qualificacoes_socios_descricao
-  ON qualificacoes_socios(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON qualificacoes_socios(descricao);
 CREATE INDEX idx_naturezas_juridicas_descricao
-  ON naturezas_juridicas(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON naturezas_juridicas(descricao);
 CREATE INDEX idx_cnaes_descricao
-  ON cnaes(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON cnaes(descricao);
 
 -- EXEMPLO DE POPULAÇÃO DE DOMÍNIO EM PL/SQL
 DECLARE
