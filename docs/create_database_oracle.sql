@@ -190,29 +190,41 @@ CREATE INDEX idx_naturezas_juridicas_descricao
 CREATE INDEX idx_cnaes_descricao
   ON cnaes(descricao);
 
--- EXEMPLO DE POPULAÇÃO DE DOMÍNIO EM PL/SQL
 DECLARE
   v_code  VARCHAR2(3);
+  v_code2 VARCHAR2(2);  -- Nova variável para 2 dígitos
   v_code3 VARCHAR2(3);
 BEGIN
   FOR i IN 1..999 LOOP
-    v_code := TO_CHAR(i);
-    v_code3 := LPAD(v_code, 3, '0');
+    v_code  := TO_CHAR(i);
+    v_code2 := LPAD(v_code, 2, '0');  -- Gera versão com 2 dígitos
+    v_code3 := LPAD(v_code, 3, '0');  -- Versão com 3 dígitos
+
+    -- Inserts fixos (mantidos da versão original)
     BEGIN
       INSERT INTO qualificacoes_socios(codigo, descricao) VALUES('0', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
+    
     BEGIN
       INSERT INTO qualificacoes_socios(codigo, descricao) VALUES('36', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
+    
     BEGIN
       INSERT INTO paises(codigo, descricao) VALUES('0', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
-    FOR v IN (SELECT v_code AS c FROM dual UNION ALL SELECT v_code3 AS c FROM dual) LOOP
+
+    -- Loop para inserir as variações numéricas na tabela PAISES
+    FOR v IN (
+      SELECT v_code  AS c FROM dual UNION ALL
+      SELECT v_code2 AS c FROM dual UNION ALL  -- Inclui versão de 2 dígitos
+      SELECT v_code3 AS c FROM dual
+    ) 
+    LOOP
       BEGIN
         INSERT INTO paises(codigo, descricao) VALUES(v.c, 'Nao Definido');
-      EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+      EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL;  -- Ignora duplicatas
+      END;
     END LOOP;
   END LOOP;
   COMMIT;
 END;
-/
