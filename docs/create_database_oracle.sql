@@ -119,6 +119,9 @@ ALTER TABLE empresas ADD (
     REFERENCES qualificacoes_socios(codigo)
 );
 
+ALTER TABLE empresas
+ADD CONSTRAINT UQ_EMPRESAS_CNPJ_BASICO UNIQUE (cnpj_basico);
+
 -- Constraints da tabela ESTABELECIMENTOS
 ALTER TABLE estabelecimentos ADD (
   CONSTRAINT fk_estabelecimentos_pais
