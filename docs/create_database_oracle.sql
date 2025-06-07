@@ -119,6 +119,9 @@ ALTER TABLE empresas ADD (
     REFERENCES qualificacoes_socios(codigo)
 );
 
+ALTER TABLE empresas
+ADD CONSTRAINT UQ_EMPRESAS_CNPJ_BASICO UNIQUE (cnpj_basico);
+
 -- Constraints da tabela ESTABELECIMENTOS
 ALTER TABLE estabelecimentos ADD (
   CONSTRAINT fk_estabelecimentos_pais
@@ -156,15 +159,13 @@ CREATE INDEX idx_usuarios_role ON usuarios (role);
 
 CREATE INDEX idx_empresas_cnpj_basico ON empresas (cnpj_basico);
 -- Para busca de texto em Oracle utilizar Oracle Text
-CREATE INDEX idx_empresas_razao_social
-  ON empresas(razao_social) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_empresas_razao_social  ON empresas(razao_social);
 CREATE INDEX idx_empresas_natureza_juridica_codigo ON empresas (natureza_juridica_codigo);
 CREATE INDEX idx_empresas_porte_empresa ON empresas (porte_empresa);
 CREATE INDEX idx_empresas_qualificacao_responsavel_codigo ON empresas (qualificacao_responsavel_codigo);
 
 CREATE INDEX idx_estabelecimentos_cnpj_basico ON estabelecimentos (cnpj_basico);
-CREATE INDEX idx_estabelecimentos_nome_fantasia
-  ON estabelecimentos(nome_fantasia) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_estabelecimentos_nome_fantasia ON estabelecimentos(nome_fantasia);
 CREATE INDEX idx_estabelecimentos_situacao_cadastral ON estabelecimentos (situacao_cadastral);
 CREATE INDEX idx_estabelecimentos_pais_codigo ON estabelecimentos (pais_codigo);
 CREATE INDEX idx_estabelecimentos_cnae_principal_codigo ON estabelecimentos (cnae_fiscal_principal_codigo);
@@ -173,8 +174,7 @@ CREATE INDEX idx_estabelecimentos_uf ON estabelecimentos (uf);
 CREATE INDEX idx_estabelecimentos_cep ON estabelecimentos (cep);
 
 CREATE INDEX idx_socios_cnpj_basico ON socios (cnpj_basico);
-CREATE INDEX idx_socios_nome_socio
-  ON socios(nome_socio) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX idx_socios_nome_socio ON socios(nome_socio);
 CREATE INDEX idx_socios_cpf_cnpj_socio ON socios (cpf_cnpj_socio);
 CREATE INDEX idx_socios_qualificacao_socio_codigo ON socios (qualificacao_socio_codigo);
 CREATE INDEX idx_socios_pais_codigo ON socios (pais_codigo);
@@ -183,39 +183,51 @@ CREATE INDEX idx_socios_qualificacao_representante_legal_codigo
   ON socios (qualificacao_representante_legal_codigo);
 
 CREATE INDEX idx_paises_descricao
-  ON paises(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON paises(descricao);
 CREATE INDEX idx_municipios_descricao
-  ON municipios(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON municipios(descricao);
 CREATE INDEX idx_qualificacoes_socios_descricao
-  ON qualificacoes_socios(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON qualificacoes_socios(descricao);
 CREATE INDEX idx_naturezas_juridicas_descricao
-  ON naturezas_juridicas(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON naturezas_juridicas(descricao);
 CREATE INDEX idx_cnaes_descricao
-  ON cnaes(descricao) INDEXTYPE IS CTXSYS.CONTEXT;
+  ON cnaes(descricao);
 
--- EXEMPLO DE POPULAÇÃO DE DOMÍNIO EM PL/SQL
 DECLARE
   v_code  VARCHAR2(3);
+  v_code2 VARCHAR2(2);  -- Nova variável para 2 dígitos
   v_code3 VARCHAR2(3);
 BEGIN
   FOR i IN 1..999 LOOP
-    v_code := TO_CHAR(i);
-    v_code3 := LPAD(v_code, 3, '0');
+    v_code  := TO_CHAR(i);
+    v_code2 := LPAD(v_code, 2, '0');  -- Gera versão com 2 dígitos
+    v_code3 := LPAD(v_code, 3, '0');  -- Versão com 3 dígitos
+
+    -- Inserts fixos (mantidos da versão original)
     BEGIN
       INSERT INTO qualificacoes_socios(codigo, descricao) VALUES('0', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
+    
     BEGIN
       INSERT INTO qualificacoes_socios(codigo, descricao) VALUES('36', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
+    
     BEGIN
       INSERT INTO paises(codigo, descricao) VALUES('0', 'Nao Definido');
     EXCEPTION WHEN OTHERS THEN NULL; END;
-    FOR v IN (SELECT v_code AS c FROM dual UNION ALL SELECT v_code3 AS c FROM dual) LOOP
+
+    -- Loop para inserir as variações numéricas na tabela PAISES
+    FOR v IN (
+      SELECT v_code  AS c FROM dual UNION ALL
+      SELECT v_code2 AS c FROM dual UNION ALL  -- Inclui versão de 2 dígitos
+      SELECT v_code3 AS c FROM dual
+    ) 
+    LOOP
       BEGIN
         INSERT INTO paises(codigo, descricao) VALUES(v.c, 'Nao Definido');
-      EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+      EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL;  -- Ignora duplicatas
+      END;
     END LOOP;
   END LOOP;
   COMMIT;
 END;
-/
