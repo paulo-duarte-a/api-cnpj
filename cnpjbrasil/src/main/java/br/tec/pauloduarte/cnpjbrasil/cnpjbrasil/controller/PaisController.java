@@ -22,7 +22,7 @@ public class PaisController {
     private final PaisService paisService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Pais> getAllPaises(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

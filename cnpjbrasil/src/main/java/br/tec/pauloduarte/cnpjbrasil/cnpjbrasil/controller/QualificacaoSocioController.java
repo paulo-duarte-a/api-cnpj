@@ -21,7 +21,7 @@ public class QualificacaoSocioController {
     private final QualificacaoSocioService qualificacaoSocioService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<QualificacaoSocio> getAllQualificacoesSocios(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

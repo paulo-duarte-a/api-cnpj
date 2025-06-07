@@ -35,13 +35,14 @@ public class Socio {
     
     @Column(name = "cpf_cnpj_socio", length = 20)
     private String cpfCnpjSocio;
-    
-    @Column(name = "qualificacao_socio_codigo")
-    private Integer qualificacaoSocioCodigo;
+
+    @ManyToOne
+    @JoinColumn(name = "qualificacao_socio_codigo", referencedColumnName = "codigo")
+    private QualificacaoSocio qualificacaoSocio;
 
     @Column(name = "data_entrada_sociedade", length = 10)
     private String dataEntradaSociedade;
-
+    
     @Column(name = "pais_codigo")
     private Integer paisCodigo;
     

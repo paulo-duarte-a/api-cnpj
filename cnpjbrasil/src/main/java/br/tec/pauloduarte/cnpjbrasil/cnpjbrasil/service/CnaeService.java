@@ -36,4 +36,8 @@ public class CnaeService {
             pageable
         );
     }
+
+    public Cnae findById(String id) {
+        return cnaeRepository.findById(id).orElse(null);
+    }
 }

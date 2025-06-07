@@ -21,7 +21,7 @@ public class EstabelecimentoController {
     private final EstabelecimentoService estabelecimentoService;
 
     // @GetMapping
-    // @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    // @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Estabelecimento> getAllEstabelecimentos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -42,7 +42,7 @@ public class EstabelecimentoController {
     }
 
     @GetMapping("/scroll")
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public EstabelecimentoScrollResponseDTO getEstabelecimentosViaScrollComFiltro(
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int limit,

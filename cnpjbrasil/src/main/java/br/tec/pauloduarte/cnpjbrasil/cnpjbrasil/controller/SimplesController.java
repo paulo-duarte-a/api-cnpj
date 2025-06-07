@@ -26,7 +26,7 @@ public class SimplesController {
     private final SimplesService simplesService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Simples> getAllSimples(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

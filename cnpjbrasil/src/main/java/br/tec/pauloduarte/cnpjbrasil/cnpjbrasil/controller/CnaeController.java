@@ -22,7 +22,7 @@ public class CnaeController {
     private final CnaeService cnaeService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Cnae> getAllCnaes(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

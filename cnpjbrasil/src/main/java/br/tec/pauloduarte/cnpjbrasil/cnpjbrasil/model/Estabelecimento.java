@@ -1,9 +1,15 @@
 package br.tec.pauloduarte.cnpjbrasil.cnpjbrasil.model;
 
+import java.util.stream.Collectors;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +25,10 @@ public class Estabelecimento {
 
     @Column(name = "cnpj_basico", nullable = false, length = 8)
     private String cnpjBasico;
+
+    @ManyToOne
+    @JoinColumn(name = "cnpj_basico", referencedColumnName = "cnpj_basico", insertable = false, updatable = false )
+    private Empresa empresa;
 
     @Column(name = "cnpj_ordem", nullable = false, length = 4)
     private String cnpjOrdem;
@@ -47,9 +57,9 @@ public class Estabelecimento {
     @Column(name = "pais_codigo", length = 10)
     private String paisCodigo;
 
-    // @ManyToOne
-    // @JoinColumn(name = "pais_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    // private Pais pais;
+    @ManyToOne
+    @JoinColumn(name = "pais_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
+    private Pais pais;
 
     @Column(name = "data_inicio_atividade", length = 10)
     private String dataInicioAtividade;
@@ -57,9 +67,9 @@ public class Estabelecimento {
     @Column(name = "cnae_fiscal_principal_codigo", length = 10)
     private String cnaeFiscalPrincipalCodigo;
 
-    // @ManyToOne
-    // @JoinColumn(name = "cnae_fiscal_principal_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
-    // private Cnae cnaeFiscalPrincipal;
+    @ManyToOne
+    @JoinColumn(name = "cnae_fiscal_principal_codigo", referencedColumnName = "codigo", insertable = false, updatable = false)
+    private Cnae cnaeFiscalPrincipal;
 
     @Column(name = "cnae_fiscal_secundaria", columnDefinition = "TEXT")
     private String cnaeFiscalSecundaria;
@@ -118,4 +128,7 @@ public class Estabelecimento {
 
     @Column(name = "data_situacao_especial", length = 10)
     private String dataSituacaoEspecial;
+
+    @Transient
+    public List<Cnae> cnaeFiscalSecundariaLista = Collections.emptyList();
 }

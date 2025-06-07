@@ -26,7 +26,7 @@ public class EmpresaController {
     private final EmpresaService empresaService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Empresa> getAllEmpresas(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,

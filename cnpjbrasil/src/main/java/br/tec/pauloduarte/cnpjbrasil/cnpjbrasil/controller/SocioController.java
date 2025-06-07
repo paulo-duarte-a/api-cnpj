@@ -26,7 +26,7 @@ public class SocioController {
     private final SocioService socioService;
     
     @GetMapping
-    @PreAuthorize("hasAnyRole('PREMIUM', 'ADMIN', 'FREE')")
+    @PreAuthorize("hasAnyRole('PREMIUM', 'BASIC', 'ADMIN', 'FREE')")
     public Page<Socio> getAllSocios(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
